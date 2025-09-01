@@ -1,4 +1,4 @@
-package com.reliaquest.api.model;
+package com.reliaquest.api.client.model.request;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -8,22 +8,17 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class CreateEmployeeInput {
+public class CreateMockEmployeeInput {
 
     @NotBlank
     private String name;
 
-    @Positive
-    @NotNull
-    private Integer salary;
+    @Positive @NotNull private Integer salary;
 
     @Min(16)
     @Max(75)
-    @NotNull
-    private Integer age;
+    @NotNull private Integer age;
 
     @NotBlank
     private String title;
 }
-
-

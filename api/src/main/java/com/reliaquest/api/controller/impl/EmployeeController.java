@@ -1,15 +1,15 @@
 package com.reliaquest.api.controller.impl;
 
+import com.reliaquest.api.client.model.request.CreateMockEmployeeInput;
+import com.reliaquest.api.client.model.response.MockEmployee;
 import com.reliaquest.api.controller.IEmployeeController;
-import com.reliaquest.api.model.CreateEmployeeInput;
-import com.reliaquest.api.model.Employee;
 import com.reliaquest.api.service.EmployeeService;
 import jakarta.validation.Valid;
+
 import java.util.List;
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,22 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/employee")
 @RequiredArgsConstructor
-public class EmployeeController implements IEmployeeController<Employee, CreateEmployeeInput> {
+public class EmployeeController implements IEmployeeController<MockEmployee, CreateMockEmployeeInput> {
 
     private final EmployeeService employeeService;
 
     @Override
-    public ResponseEntity<List<Employee>> getAllEmployees() {
+    public ResponseEntity<List<MockEmployee>> getAllEmployees() {
         return ResponseEntity.ok(employeeService.getAllEmployees());
     }
 
     @Override
-    public ResponseEntity<List<Employee>> getEmployeesByNameSearch(String searchString) {
+    public ResponseEntity<List<MockEmployee>> getEmployeesByNameSearch(String searchString) {
         return ResponseEntity.ok(employeeService.searchEmployeesByName(searchString));
     }
 
     @Override
-    public ResponseEntity<Employee> getEmployeeById(String id) {
+    public ResponseEntity<MockEmployee> getEmployeeById(String id) {
         return employeeService
                 .getEmployeeById(UUID.fromString(id))
                 .map(ResponseEntity::ok)
@@ -51,7 +51,7 @@ public class EmployeeController implements IEmployeeController<Employee, CreateE
     }
 
     @Override
-    public ResponseEntity<Employee> createEmployee(@Valid CreateEmployeeInput employeeInput) {
+    public ResponseEntity<MockEmployee> createEmployee(@Valid CreateMockEmployeeInput employeeInput) {
         return employeeService
                 .createEmployee(employeeInput)
                 .map(ResponseEntity::ok)
@@ -66,5 +66,3 @@ public class EmployeeController implements IEmployeeController<Employee, CreateE
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
-
-
