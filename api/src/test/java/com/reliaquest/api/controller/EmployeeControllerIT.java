@@ -28,7 +28,7 @@ import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class MockEmployeeControllerIT {
+class EmployeeControllerIT {
 
     @LocalServerPort
     int port;
@@ -58,7 +58,7 @@ class MockEmployeeControllerIT {
     }
 
     @Test
-    void getAllMockEmployees_returnsList() throws Exception {
+    void getAllEmployees_returnsList() throws Exception {
         var payload = new Response<>(
                 List.of(
                         new MockEmployee(UUID.randomUUID(), "Alice", 100, 30, "Engineer", "a@x.com"),
@@ -82,7 +82,7 @@ class MockEmployeeControllerIT {
     }
 
     @Test
-    void getMockEmployeeById_returnsMockEmployee() throws Exception {
+    void getEmployeeById_returnsEmployee() throws Exception {
         var emp = new MockEmployee(UUID.randomUUID(), "Alice", 100, 30, "Engineer", "a@x.com");
         var payload = new Response<>(emp, Response.Status.HANDLED, null);
         mockServer.enqueue(new MockResponse()
@@ -101,7 +101,7 @@ class MockEmployeeControllerIT {
     }
 
     @Test
-    void createMockEmployee_returnsCreated() throws Exception {
+    void createEmployee_returnsCreated() throws Exception {
         var emp = new MockEmployee(UUID.randomUUID(), "Alice", 100, 30, "Engineer", "a@x.com");
         var payload = new Response<>(emp, Response.Status.HANDLED, null);
         mockServer.enqueue(new MockResponse()
@@ -125,7 +125,7 @@ class MockEmployeeControllerIT {
     }
 
     @Test
-    void deleteMockEmployee_returnsName() throws Exception {
+    void deleteEmployee_returnsName() throws Exception {
         var emp = new MockEmployee(UUID.randomUUID(), "Alice", 100, 30, "Engineer", "a@x.com");
         var findPayload = new Response<>(emp, Response.Status.HANDLED, null);
         var deletePayload = new Response<>(true, Response.Status.HANDLED, null);

@@ -5,6 +5,7 @@ import com.reliaquest.api.client.model.request.CreateMockEmployeeInput;
 import com.reliaquest.api.client.model.request.DeleteMockEmployeeInput;
 import com.reliaquest.api.client.model.response.MockEmployee;
 import com.reliaquest.api.client.model.response.Response;
+import io.micrometer.common.util.StringUtils;
 import jakarta.validation.Valid;
 
 import java.util.Collections;
@@ -28,15 +29,19 @@ public class EmployeeService {
 
     public List<MockEmployee> getAllEmployees() {
         Response<List<MockEmployee>> response = client.getEmployees();
-        return response == null ? Collections.emptyList() : response.data();
+        return (response == null || response.data() == null) ? Collections.emptyList() : response.data();
     }
 
     public List<MockEmployee> searchEmployeesByName(String searchString) {
+        if (StringUtils.isEmpty(searchString)) {
+            return Collections.emptyList();
+        }
         List<MockEmployee> employees = getAllEmployees();
+        String lowerSearchString = searchString.toLowerCase();
         return employees.stream()
                 .filter(e -> e != null
                         && e.getName() != null
-                        && e.getName().toLowerCase().contains(searchString.toLowerCase()))
+                        && e.getName().toLowerCase().contains(lowerSearchString))
                 .collect(Collectors.toList());
     }
 
@@ -83,6 +88,10 @@ public class EmployeeService {
             return Optional.empty();
         }
         String mockEmployeeName = employeeOpt.get().getName();
+        if (StringUtils.isEmpty(mockEmployeeName)) {
+            log.warn("Employee with id {} has null or empty name, cannot delete", id);
+            return Optional.empty();
+        }
         return deleteEmployee(new DeleteMockEmployeeInput(mockEmployeeName));
     }
 

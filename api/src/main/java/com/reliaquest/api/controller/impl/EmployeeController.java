@@ -34,10 +34,14 @@ public class EmployeeController implements IEmployeeController<MockEmployee, Cre
 
     @Override
     public ResponseEntity<MockEmployee> getEmployeeById(String id) {
-        return employeeService
-                .getEmployeeById(UUID.fromString(id))
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        try {
+            return employeeService
+                    .getEmployeeById(UUID.fromString(id))
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 
     @Override
@@ -60,9 +64,13 @@ public class EmployeeController implements IEmployeeController<MockEmployee, Cre
 
     @Override
     public ResponseEntity<String> deleteEmployeeById(String id) {
-        return employeeService
-                .deleteEmployeeById(UUID.fromString(id))
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        try {
+            return employeeService
+                    .deleteEmployeeById(UUID.fromString(id))
+                    .map(ResponseEntity::ok)
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
     }
 }
